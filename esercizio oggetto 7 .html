@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <style>
+        img {
+
+            width: 150px;
+        }
+    </style>
+
+    <script>
+
+        class song {
+
+            constructor(titolo, autore, anno, url) {
+
+                this.titolo = titolo
+                this.autore = autore
+                this.anno = anno
+                this.url = url
+            }
+        }
+
+        window.onload = gestoreLoad
+
+        function gestoreLoad() {
+
+            hitParade = []
+            let c1 = new song("Alba chiara", "Vasco Rossi", 1980, "https://m.media-amazon.com/images/I/81hpNK9ghWL.__AC_SX300_SY300_QL70_ML2_.jpg")
+            let c2 = new song("Senza pietà", "Anna Oxa", 1993, "https://m.media-amazon.com/images/I/517EUtxpp0L._AC_UL320_.jpg")
+            let c3 = new song("Oro", "Mango", 1999, "https://m.media-amazon.com/images/I/71N66k3GNML._AC_UL320_.jpg")
+            let c4 = new song("una rosa blu", "Michele Zarrillo", 1988, "https://m.media-amazon.com/images/I/71VqzBtTvSL._AC_UL320_.jpg")
+            let c5 = new song("Laura non c'è", "Nek", 1996, "https://m.media-amazon.com/images/I/71+sIWxVaUL._AC_UL320_.jpg")
+
+
+            hitParade.push(c1)
+            hitParade.push(c2)
+            hitParade.push(c3)
+            hitParade.push(c4)
+            hitParade.push(c5)
+
+            let nodoTab = document.getElementById("tab")
+            function popolaTabella() {
+
+                rimuoviFigli(nodoTab)
+
+                for (let i = 0; i < hitParade.length; i++) {
+
+
+                    let nodoTr = document.createElement("tr")
+                    let nodoPos = document.createElement("td")
+                    nodoPos.textContent = i + 1
+
+
+                    let nodoTitolo = document.createElement("td")
+                    nodoTitolo.textContent = hitParade[i].titolo
+                    let nodoAutore = document.createElement("td")
+                    nodoAutore.textContent = hitParade[i].autore
+                    let nodoAnno = document.createElement("td")
+                    nodoAnno.textContent = hitParade[i].anno
+                    let nodoImg = document.createElement("td")
+                    let img = document.createElement("img")
+                    img.src = hitParade[i].url
+                    nodoTr.appendChild(nodoPos)
+
+                    nodoImg.appendChild(img)
+                    nodoTr.appendChild(nodoTitolo)
+                    nodoTr.appendChild(nodoAutore)
+                    nodoTr.appendChild(nodoAnno)
+                    nodoTr.appendChild(nodoImg)
+                    nodoTab.appendChild(nodoTr)
+
+
+                }
+            }
+            popolaTabella()
+
+            let nodoS1 = document.getElementById("select1")
+            let nodoS2 = document.getElementById("select2")
+
+            function popolaSelect() {
+
+                rimuoviFigli(nodoS1)
+                rimuoviFigli(nodoS2)
+
+
+
+
+                for (let i = 0; i < hitParade.length; i++) {
+                    let nodoOpt = document.createElement("option")
+                    nodoOpt.value = i
+                    nodoOpt.textContent = "Pos: " + (i + 1) + " " + hitParade[i].titolo
+
+                    let nodoOpt1 = document.createElement("option")
+                    nodoOpt1.value = i
+                    nodoOpt1.textContent = "Pos: " + (i + 1) + " " + hitParade[i].titolo
+
+
+
+                    nodoS1.appendChild(nodoOpt)
+                    nodoS2.appendChild(nodoOpt1)
+                }
+
+                var elems = document.querySelectorAll('select');
+                var instances = M.FormSelect.init(elems);
+
+
+            }
+
+            popolaSelect()
+
+            let btn = document.getElementById("btn")
+
+            btn.onclick = cambia
+
+            function cambia() {
+
+                let l1 = parseInt(document.getElementById("select1").value)
+                let l2 = parseInt(document.getElementById("select2").value)
+
+                let l3 = hitParade[l2]
+
+                hitParade[l2] = hitParade[l1]
+
+                hitParade[l1] = l3
+
+                popolaTabella()
+                popolaSelect()
+
+
+
+
+            }
+
+            function rimuoviFigli(nodo) {
+                while (nodo.childNodes.length > 0) {
+
+                    nodo.removeChild(nodo.firstChild);
+                }
+            }
+
+            let btn1 = document.getElementById("btn1")
+            btn1.onclick = aggiungi
+
+
+            function aggiungi() {
+
+                let titolo = document.getElementById("titolo").value
+                let autore = document.getElementById("autore").value
+                let anno = document.getElementById("anno").value
+                let url = document.getElementById("url").value
+                let posizione = document.getElementById("posizione").value
+
+
+                if (titolo != "" && autore != "" && anno != "" && url != "" && posizione >= 1 && posizione <= 5) {
+
+                    let l1 = new song(titolo, autore, anno, url)
+                    hitParade[posizione - 1] = l1
+                    popolaTabella()
+                    popolaSelect()
+                }
+
+                else alert("Devi compilare tutti i campi")
+
+            }
+
+        }
+    </script>
+
+
+
+</head>
+
+<body>
+
+
+    <div class="container">
+        <h1>La mia discografia</h1>
+
+        <div class="input-field col s12">
+            <select id="select1">
+
+            </select>
+            <label>Seleziona la prima canzone</label>
+        </div>
+        <hr>
+        <div class="input-field col s12">
+            <select id="select2">
+
+            </select>
+            <label>Seleziona la seconda canzone</label>
+        </div>
+
+        <button id="btn">Cambia posizione</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Posizione</th>
+                    <th>Titolo</th>
+                    <th>Autore</th>
+                    <th>Anno di pubblicazione</th>
+                    <th>Immagine</th>
+                </tr>
+            </thead>
+
+            <tbody id="tab">
+
+
+            </tbody>
+        </table>
+
+
+        <h3>
+            Aggiungi una canzone alla classifica
+        </h3>
+        Titolo:
+        <br>
+        <input type="text" required id="titolo">
+        <br>
+        Autore:
+        <br>
+        <input type="text" required id="autore">
+        <br>
+        Anno:
+        <br>
+        <input type="text" required id="anno">
+        <br>
+        Url:
+        <br>
+
+        <input type="text" required id="url">
+        <br>
+        Posizione:
+        <br>
+        <input type="number" required id="posizione" min="1" max="5">
+        <br>
+        <button id="btn1">Aggiungi</button>
+
+
+    </div>
+
+
+
+</body>
+
+</html>
